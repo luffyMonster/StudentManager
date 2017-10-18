@@ -1,28 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.dn.studentManager.server.domain;
+package com.dn.studentManager.server.entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author ict-sv-nghiatd
  */
 @Entity
+@Table(name = "tbl_subject")
 public class Subject implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @Column(name = "name", nullable = false)
+    private String name;
+    
+    @Column(name = "credit-qty")
+    private int creditQty;
+    
+    @Column(name = "discription")
+    private String discription;
 
+    
     public Long getId() {
         return id;
     }
@@ -31,6 +39,31 @@ public class Subject implements Serializable {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCreditQty() {
+        return creditQty;
+    }
+
+    public void setCreditQty(int creditQty) {
+        this.creditQty = creditQty;
+    }
+
+    public String getDiscription() {
+        return discription;
+    }
+
+    public void setDiscription(String discription) {
+        this.discription = discription;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -53,7 +86,7 @@ public class Subject implements Serializable {
 
     @Override
     public String toString() {
-        return "com.dn.studentManager.server.domain.Subject[ id=" + id + " ]";
+        return "com.dn.studentManager.domain.Student[ id=" + id + " ]";
     }
     
 }
