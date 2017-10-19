@@ -11,13 +11,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author ict-sv-nghiatd
  */
 @Entity
+@Table(name = "tbl_mark")
 public class Mark implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,14 +28,15 @@ public class Mark implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "student_id")
+    @JoinColumn(name = "student_id")
     @ManyToOne()
     private Student student;
     
-    @Column(name = "partical_class")
+    @JoinColumn(name = "partical_class_id")
+    @ManyToOne()
     private ParticalClass particalClass;
     
-    @Column(name = "deligence-mark")
+    @Column(name = "deligence_mark")
     private float deligenceMark;
     
     @Column(name = "practice_mark")

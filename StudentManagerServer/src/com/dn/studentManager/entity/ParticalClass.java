@@ -8,19 +8,21 @@ package com.dn.studentManager.entity;
 import java.io.Serializable;
 import java.sql.Time;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author ict-sv-nghiatd
  */
 @Entity
+@Table(name = "tbl_partical_class")
 public class ParticalClass implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,7 +33,7 @@ public class ParticalClass implements Serializable {
     @Column(name = "name")
     private String name;
     
-    @Column(name = "subject_id")
+    @JoinColumn(name = "subject_id")
     @ManyToOne()
     private Subject subject;
     

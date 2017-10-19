@@ -1,6 +1,7 @@
 package com.dn.studentManager;
 
 import com.dn.studentManager.controller.ServerControl;
+import com.dn.studentManager.view.ServerView;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,9 +19,10 @@ import java.util.logging.Logger;
 public class Application {
     
     public static void main(String[] args) {
-        ServerControl serverControl = new ServerControl();
+        ServerView view = new ServerView();
+        ServerControl serverControl = new ServerControl(view);
         try {
-            serverControl.start(8888);
+            serverControl.start(8080);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }

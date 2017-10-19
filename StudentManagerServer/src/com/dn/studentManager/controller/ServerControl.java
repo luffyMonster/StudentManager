@@ -7,6 +7,7 @@ package com.dn.studentManager.controller;
 
 import com.dn.studentManager.controller.jpaControl.SubjectJpaController;
 import com.dn.studentManager.shared.Request;
+import com.dn.studentManager.view.ServerView;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,12 +24,21 @@ import javax.persistence.EntityManagerFactory;
 public class ServerControl {
 
     private ServerSocket server;
+    private ServerView view;
+    static {
+        new JpaUtils();
+    }
+    
+    public ServerControl(ServerView view) {
+        this.view = view;
+    }
 
     public void start(int port) throws IOException {
         server = new ServerSocket(port);
+        view.printMessage("Server is running on port " + port);
         while (true) {
             Socket socket = server.accept();
-
+            view.printMessage("A client " + socket.getInetAddress().getHostAddress() + " connected " );
             new Thread(() -> {
                 handleRequestFromClient(socket);
             }).start();
@@ -68,7 +78,7 @@ public class ServerControl {
                     throw new IllegalArgumentException("Invalid data");
                 }
             }
-            System.out.println("Client out");
+            
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -81,6 +91,7 @@ public class ServerControl {
                 }
                 if (socket != null) {
                     socket.close();
+                    view.printMessage("Client " + socket.getInetAddress().getHostName() + " disconected");
                 }
             } catch (IllegalArgumentException ex) {
                 Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,7 +100,7 @@ public class ServerControl {
             } catch (Exception ex) {
                 Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
         }
 
     }

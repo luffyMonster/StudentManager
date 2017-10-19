@@ -93,7 +93,7 @@ public class SubjectJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try{
             return em.createQuery("SELECT s FROM Subject s WHERE s.name LIKE ?1", Subject.class)
-                .setParameter(1, name)
+                .setParameter(1, "%" + name + "%")
                 .getResultList();
         } finally {
             em.close();
