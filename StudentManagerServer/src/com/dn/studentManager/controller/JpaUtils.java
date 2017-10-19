@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dn.studentManager.server.controller;
+package com.dn.studentManager.controller;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

@@ -3,23 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dn.studentManager.server.controller;
+package com.dn.studentManager.controller;
 
-import com.dn.studentManager.server.entity.Student;
+import com.dn.studentManager.controller.jpaControl.SubjectJpaController;
 import com.dn.studentManager.shared.Request;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -50,21 +45,31 @@ public class ServerControl {
             fromClient = new ObjectInputStream(socket.getInputStream());
             Object data;
 
+            //jpa
+            EntityManagerFactory emf = JpaUtils.getEntityManagerFactory();
+            SubjectJpaController subjectJpaController = new SubjectJpaController(emf);
+
+            handlelabel:
             while ((data = fromClient.readObject()) != null) {
-                //TODO: handle
-                if (data instanceof Request){
+                if (data instanceof Request) {
                     Request req = (Request) data;
-                    System.out.println(req.getAction());
+                    switch (req.getAction()) {
+                        case "find-subject":
+                            toClient.writeObject(subjectJpaController.findSubjectByName((String) req.getData()));
+                            break;
+                        case ".":
+                            toClient.writeObject("End");
+                            break handlelabel;
+                        default:
+                            toClient.writeObject("No action");
+                            break;
+                    };
                 } else {
                     throw new IllegalArgumentException("Invalid data");
                 }
-
-                Object respone = data;
-                toClient.writeObject(new Request<Student>("x", new Student()));
             }
-        } catch (IOException ex) {
-            Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+            System.out.println("Client out");
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -77,7 +82,7 @@ public class ServerControl {
                 if (socket != null) {
                     socket.close();
                 }
-            } catch (IllegalArgumentException ex){
+            } catch (IllegalArgumentException ex) {
                 Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
@@ -95,4 +100,7 @@ public class ServerControl {
         }
     }
 
+    public void findSubject(String subjectName, ObjectOutputStream out) {
+
+    }
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dn.studentManager.client.controller;
+package com.dn.studentManager.controller;
 
 import com.dn.studentManager.shared.Request;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author ict-sv-nghiatd
  */
 public class ClientControl {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         Socket socket = new Socket("localhost", 8888);
         
         
@@ -29,9 +29,8 @@ public class ClientControl {
         toServer = new ObjectOutputStream(socket.getOutputStream());
         fromServer = new ObjectInputStream(socket.getInputStream());
         Object data;
-        toServer.writeObject(new Request<>("xxx", "xx"));
-        toServer.writeObject(new Request<>(".", "xxx"));
-        
+        toServer.writeObject(new Request<>("find-subject", "xx"));
+        System.out.println(fromServer.readObject());
     }
    
 }

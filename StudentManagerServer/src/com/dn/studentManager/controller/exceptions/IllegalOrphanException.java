@@ -1,4 +1,4 @@
-package com.dn.studentManager.server.controller.entiyControl.exceptions;
+package com.dn.studentManager.controller.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;

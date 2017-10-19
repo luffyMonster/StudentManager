@@ -1,4 +1,4 @@
-package com.dn.studentManager.server.controller.entiyControl.exceptions;
+package com.dn.studentManager.controller.jpaControl.exceptions;
 
 public class NonexistentEntityException extends Exception {
     public NonexistentEntityException(String message, Throwable cause) {

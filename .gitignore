@@ -22,3 +22,4 @@
 hs_err_pid*
 /StudentManagerServer/build/
 /StudentManagerClient/build/
+/StudentManagerClient/dist/

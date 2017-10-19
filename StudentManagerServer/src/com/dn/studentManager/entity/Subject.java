@@ -1,4 +1,4 @@
-package com.dn.studentManager.server.entity;
+package com.dn.studentManager.entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -24,7 +24,7 @@ public class Subject implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
     
-    @Column(name = "credit-qty")
+    @Column(name = "credit_qty")
     private int creditQty;
     
     @Column(name = "discription")

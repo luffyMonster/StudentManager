@@ -1,6 +1,6 @@
-package om.dn.studentManager.server;
+package com.dn.studentManager;
 
-import com.dn.studentManager.server.controller.ServerControl;
+import com.dn.studentManager.controller.ServerControl;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

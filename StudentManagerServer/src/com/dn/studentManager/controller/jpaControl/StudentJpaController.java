@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dn.studentManager.server.controller.entityControl;
+package com.dn.studentManager.controller.jpaControl;
 
-import com.dn.studentManager.server.controller.entiyControl.exceptions.NonexistentEntityException;
-import com.dn.studentManager.server.entity.Student;
+import com.dn.studentManager.entity.Student;
+import com.dn.studentManager.controller.jpaControl.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -18,7 +18,7 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author duynghia
+ * @author ict-sv-nghiatd
  */
 public class StudentJpaController implements Serializable {
 

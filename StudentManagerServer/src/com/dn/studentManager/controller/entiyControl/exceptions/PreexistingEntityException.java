@@ -1,4 +1,4 @@
-package com.dn.studentManager.server.controller.entiyControl.exceptions;
+package com.dn.studentManager.controller.entiyControl.exceptions;
 
 public class PreexistingEntityException extends Exception {
     public PreexistingEntityException(String message, Throwable cause) {

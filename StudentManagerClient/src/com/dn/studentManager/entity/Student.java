@@ -3,40 +3,34 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dn.studentManager.server.entity;
+package com.dn.studentManager.entity;
+
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
 
 /**
  *
  * @author ict-sv-nghiatd
  */
-@Entity
-@Table(name = "tbl_student")
+
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+  
     private Long id;
     
-    @Column(name = "name")
+    
     private String name;
     
-    @Column(name = "birthday")
+   
     private LocalDate birthday;
     
-    @Column(name = "faculty")
+   
     private String faculty;
     
-    @Column(name = "birthplace")
+   
     private String birthplace;
 
     public Long getId() {

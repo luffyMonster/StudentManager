@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dn.studentManager.server.controller.entityControl;
+package com.dn.studentManager.controller.jpaControl;
 
-import com.dn.studentManager.server.controller.entiyControl.exceptions.NonexistentEntityException;
-import com.dn.studentManager.server.entity.Subject;
+import com.dn.studentManager.entity.Mark;
+import com.dn.studentManager.controller.jpaControl.exceptions.NonexistentEntityException;
+import com.dn.studentManager.entity.ParticalClass;
 import java.io.Serializable;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -18,11 +22,11 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author duynghia
+ * @author ict-sv-nghiatd
  */
-public class SubjectJpaController implements Serializable {
+public class MarkJpaController implements Serializable {
 
-    public SubjectJpaController(EntityManagerFactory emf) {
+    public MarkJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,12 +35,12 @@ public class SubjectJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Subject subject) {
+    public void create(Mark mark) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(subject);
+            em.persist(mark);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -45,20 +49,42 @@ public class SubjectJpaController implements Serializable {
         }
     }
 
-    public void edit(Subject subject) throws NonexistentEntityException, Exception {
+    public void edit(Mark mark) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            subject = em.merge(subject);
+            mark = em.merge(mark);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = subject.getId();
-                if (findSubject(id) == null) {
-                    throw new NonexistentEntityException("The subject with id " + id + " no longer exists.");
+                Long id = mark.getId();
+                if (findMark(id) == null) {
+                    throw new NonexistentEntityException("The mark with id " + id + " no longer exists.");
                 }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public void edit(List<Mark> marks){
+        final EntityManager em = getEntityManager();
+        
+        try {
+            em.getTransaction().begin();
+//            int batchSize = 500;
+            for(Mark m: marks){
+                em.merge(m);
+            };
+            em.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            if (em.getTransaction() != null && em.getTransaction().isActive()){
+             em.getTransaction().rollback();
             }
             throw ex;
         } finally {
@@ -73,14 +99,14 @@ public class SubjectJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Subject subject;
+            Mark mark;
             try {
-                subject = em.getReference(Subject.class, id);
-                subject.getId();
+                mark = em.getReference(Mark.class, id);
+                mark.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The subject with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The mark with id " + id + " no longer exists.", enfe);
             }
-            em.remove(subject);
+            em.remove(mark);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -89,19 +115,30 @@ public class SubjectJpaController implements Serializable {
         }
     }
 
-    public List<Subject> findSubjectEntities() {
-        return findSubjectEntities(true, -1, -1);
+    public List<Mark> findAllMarkByParticalClass(ParticalClass pc) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT m FROM Mark m WHERE m.particalClass.id = ?1", Mark.class)
+                    .setParameter(1, pc.getId())
+                    .getResultList();
+        } finally {
+            em.close();
+        }
     }
 
-    public List<Subject> findSubjectEntities(int maxResults, int firstResult) {
-        return findSubjectEntities(false, maxResults, firstResult);
+    public List<Mark> findMarkEntities() {
+        return findMarkEntities(true, -1, -1);
     }
 
-    private List<Subject> findSubjectEntities(boolean all, int maxResults, int firstResult) {
+    public List<Mark> findMarkEntities(int maxResults, int firstResult) {
+        return findMarkEntities(false, maxResults, firstResult);
+    }
+
+    private List<Mark> findMarkEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Subject.class));
+            cq.select(cq.from(Mark.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -113,20 +150,20 @@ public class SubjectJpaController implements Serializable {
         }
     }
 
-    public Subject findSubject(Long id) {
+    public Mark findMark(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Subject.class, id);
+            return em.find(Mark.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getSubjectCount() {
+    public int getMarkCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Subject> rt = cq.from(Subject.class);
+            Root<Mark> rt = cq.from(Mark.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -134,5 +171,5 @@ public class SubjectJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
