@@ -22,13 +22,13 @@ public class Mark implements Serializable {
     
     private ParticalClass particalClass;
     
-    private float deligenceMark;
+    private Float deligenceMark;
     
-    private float praceticeMark;
+    private Float praceticeMark;
     
-    private float testMark;
+    private Float testMark;
     
-    private float finalExamMark;
+    private Float finalExamMark;
     
     
     public Long getId() {
@@ -55,35 +55,35 @@ public class Mark implements Serializable {
         this.particalClass = particalClass;
     }
 
-    public float getDeligenceMark() {
+    public Float getDeligenceMark() {
         return deligenceMark;
     }
 
-    public void setDeligenceMark(float deligenceMark) {
+    public void setDeligenceMark(Float deligenceMark) {
         this.deligenceMark = deligenceMark;
     }
 
-    public float getPraceticeMark() {
+    public Float getPraceticeMark() {
         return praceticeMark;
     }
 
-    public void setPraceticeMark(float praceticeMark) {
+    public void setPraceticeMark(Float praceticeMark) {
         this.praceticeMark = praceticeMark;
     }
 
-    public float getTestMark() {
+    public Float getTestMark() {
         return testMark;
     }
 
-    public void setTestMark(float testMark) {
+    public void setTestMark(Float testMark) {
         this.testMark = testMark;
     }
 
-    public float getFinalExamMark() {
+    public Float getFinalExamMark() {
         return finalExamMark;
     }
 
-    public void setFinalExamMark(float finalExamMark) {
+    public void setFinalExamMark(Float finalExamMark) {
         this.finalExamMark = finalExamMark;
     }
     

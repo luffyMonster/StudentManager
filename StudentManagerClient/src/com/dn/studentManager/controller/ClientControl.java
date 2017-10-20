@@ -5,6 +5,8 @@
  */
 package com.dn.studentManager.controller;
 
+import com.dn.studentManager.entity.Mark;
+import com.dn.studentManager.entity.ParticalClass;
 import com.dn.studentManager.entity.Subject;
 import com.dn.studentManager.shared.Request;
 import com.dn.studentManager.view.TypeMarkView;
@@ -36,6 +38,8 @@ public class ClientControl {
     private ObjectInputStream fromServer;
     private TypeMarkView view;
     private List<Subject> subjects;
+    private List<ParticalClass> classes;
+    private List<Mark> marks;
 
     public ClientControl(TypeMarkView view) {
         this.view = view;
@@ -59,8 +63,9 @@ public class ClientControl {
             Request req = new Request("find-subject", view.getSubjectName().getText().trim());
             try {
                 subjects = (List<Subject>) sendRequest(req);
-                
+                view.setVissible(view.getSaveButton(), false);
                 showView("Danh sách môn học", "card2");
+                view.getTableSubject().clearSelection();
                 
                 DefaultTableModel modelSubject = (DefaultTableModel) view.getTableSubject().getModel();
                 modelSubject.getDataVector().removeAllElements();
@@ -83,17 +88,89 @@ public class ClientControl {
             if (!e.getValueIsAdjusting()){
                 JTable t = view.getTableSubject();
                 int row = t.getSelectedRow();
-                if (subjects != null && row < subjects.size()){
+                if (row != -1 && subjects != null && row < subjects.size()){
+                    Request req = new Request("find-partical-class", subjects.get(row));
                     
-                    //send
-                    System.out.println(subjects.get(row).getName());
-                    showView("Danh sách lớp học phần", "card3");
+                    
+                    try {
+                        classes = (List<ParticalClass>) sendRequest(req);
+                        showView("Danh sách lớp học phần: " + subjects.get(row).getName(), "card3");
+                        
+                        DefaultTableModel model = (DefaultTableModel)view.getTableParticalClass().getModel();
+                        model.getDataVector().removeAllElements();
+                        
+                        if (classes != null && classes.isEmpty()){
+                            model.addRow(new Object[]{"Không tìm thấy!", null, null, null, null, null});
+                        }
+                        
+                        for (ParticalClass p:classes){
+                            model.addRow(new Object[]{p.getId(), p.getName(), p.getDayOfWeek(), p.getTime(), p.getRoom(), p.getStudentQty()});
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(ClientControl.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ClientControl.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
             
         });
         
+        view.getTableParticalClass().getSelectionModel().addListSelectionListener((e)->{
+            if (!e.getValueIsAdjusting()){
+                JTable t = view.getTableParticalClass();
+                int row = t.getSelectedRow();
+                if (row != -1 && classes != null && row < classes.size()){
+                    Request req = new Request("find-mark", classes.get(row));
+                    
+                    try {
+                        marks = (List<Mark>)sendRequest(req);
+                        view.setVissible(view.getSaveButton(), true);
+                        showView("Danh sách sinh viên lớp " + classes.get(row).getName(), "card4");
+                        DefaultTableModel model = (DefaultTableModel)view.getTableMark().getModel();
+                        model.getDataVector().removeAllElements();
+                        
+                        if (classes != null && classes.isEmpty()){
+                            model.addRow(new Object[]{"Không tìm thấy!", null, null, null, null, null, null});
+                        }
+                        
+                        for (Mark m:marks){
+                            model.addRow(new Object[]{m.getId(), m.getStudent().getName(), m.getStudent().getBirthday(),
+                                m.getDeligenceMark(), m.getTestMark(), m.getPraceticeMark(), m.getFinalExamMark()
+                            });
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(ClientControl.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ClientControl.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
         
+        view.addActionListenerForSaveButton((e)->{
+            if (view.getTableMark().getCellEditor() != null) view.getTableMark().getCellEditor().stopCellEditing();
+            JTable table = view.getTableMark();
+            int i = -1;
+            for (Mark m:marks){
+                m.setDeligenceMark((Float)table.getValueAt(++i, 3));
+                m.setTestMark((Float)table.getValueAt(i, 4));
+                m.setPraceticeMark((Float)table.getValueAt(i, 5));
+                m.setFinalExamMark((Float)table.getValueAt(i, 6));
+            }
+            
+            Request req = new Request("save-mark", marks);
+            String res = null;
+            try {
+                res = (String)sendRequest(req);
+            } catch (IOException ex) {
+                res = "Error: " + ex.getMessage();
+                Logger.getLogger(ClientControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ClientControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            view.showMessage(res);
+        });
     }
     
     public void showView(String label, String viewname){

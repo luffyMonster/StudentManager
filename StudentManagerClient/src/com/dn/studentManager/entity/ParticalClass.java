@@ -36,7 +36,7 @@ public class ParticalClass implements Serializable {
     private String room;
     
     
-    private int studentQty;
+    private Integer studentQty;
 
     public Long getId() {
         return id;
@@ -45,6 +45,56 @@ public class ParticalClass implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
+    }
+
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public Integer getStudentQty() {
+        return studentQty;
+    }
+
+    public void setStudentQty(Integer studentQty) {
+        this.studentQty = studentQty;
+    }
+    
+    
 
     @Override
     public int hashCode() {

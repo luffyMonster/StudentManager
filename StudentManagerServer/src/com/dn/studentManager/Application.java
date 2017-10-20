@@ -22,7 +22,7 @@ public class Application {
         ServerView view = new ServerView();
         ServerControl serverControl = new ServerControl(view);
         try {
-            serverControl.start(8080);
+            serverControl.start(8088);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }

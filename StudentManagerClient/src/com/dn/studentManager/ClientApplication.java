@@ -20,7 +20,7 @@ public class ClientApplication {
         try {
             TypeMarkView view = new TypeMarkView();
             ClientControl control = new ClientControl(view);
-            control.startConnection("localhost", 8080);
+            control.startConnection("localhost", 8088);
             control.handle();
         } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);

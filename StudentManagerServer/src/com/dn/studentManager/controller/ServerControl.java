@@ -5,7 +5,12 @@
  */
 package com.dn.studentManager.controller;
 
+import com.dn.studentManager.controller.jpaControl.MarkJpaController;
+import com.dn.studentManager.controller.jpaControl.ParticalClassJpaController;
 import com.dn.studentManager.controller.jpaControl.SubjectJpaController;
+import com.dn.studentManager.entity.Mark;
+import com.dn.studentManager.entity.ParticalClass;
+import com.dn.studentManager.entity.Subject;
 import com.dn.studentManager.shared.Request;
 import com.dn.studentManager.view.ServerView;
 import java.io.IOException;
@@ -13,6 +18,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
@@ -25,10 +31,11 @@ public class ServerControl {
 
     private ServerSocket server;
     private ServerView view;
+
     static {
         new JpaUtils();
     }
-    
+
     public ServerControl(ServerView view) {
         this.view = view;
     }
@@ -38,7 +45,7 @@ public class ServerControl {
         view.printMessage("Server is running on port " + port);
         while (true) {
             Socket socket = server.accept();
-            view.printMessage("A client " + socket.getInetAddress().getHostAddress() + " connected " );
+            view.printMessage("A client " + socket.getInetAddress().getHostAddress() + " connected ");
             new Thread(() -> {
                 handleRequestFromClient(socket);
             }).start();
@@ -57,7 +64,9 @@ public class ServerControl {
 
             //jpa
             EntityManagerFactory emf = JpaUtils.getEntityManagerFactory();
-            SubjectJpaController subjectJpaController = new SubjectJpaController(emf);
+            SubjectJpaController sjc = new SubjectJpaController(emf);
+            ParticalClassJpaController pcjc = new ParticalClassJpaController(emf);
+            MarkJpaController mjc = new MarkJpaController(emf);
 
             handlelabel:
             while ((data = fromClient.readObject()) != null) {
@@ -65,10 +74,18 @@ public class ServerControl {
                     Request req = (Request) data;
                     switch (req.getAction()) {
                         case "find-subject":
-                            toClient.writeObject(subjectJpaController.findSubjectByName((String) req.getData()));
+                            toClient.writeObject(sjc.findSubjectByName((String) req.getData()));
                             break;
+                        case "find-partical-class":
+                            toClient.writeObject(pcjc.findParticalClasses((Subject) req.getData()));
+                            break;
+                        case "find-mark":
+                            toClient.writeObject(mjc.findAllMarkByParticalClass((ParticalClass) req.getData()));
+                            break;
+                        case "save-mark":
+                            toClient.writeObject(saveMark(mjc, (List<Mark>) req.getData()));
                         case ".":
-                            toClient.writeObject("End");
+                            toClient.writeObject(".");
                             break handlelabel;
                         default:
                             toClient.writeObject("No action");
@@ -78,7 +95,7 @@ public class ServerControl {
                     throw new IllegalArgumentException("Invalid data");
                 }
             }
-            
+
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -100,7 +117,7 @@ public class ServerControl {
             } catch (Exception ex) {
                 Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
 
     }
@@ -111,7 +128,13 @@ public class ServerControl {
         }
     }
 
-    public void findSubject(String subjectName, ObjectOutputStream out) {
-
+    public String saveMark(MarkJpaController mjc, List<Mark> list) {
+        try {
+            mjc.edit(list);
+            return "Success";
+        } catch (Exception e) {
+            Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, e);
+            return e.getMessage();
+        }
     }
 }

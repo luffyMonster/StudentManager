@@ -18,7 +18,7 @@ public class Subject implements Serializable {
     private String name;
     
    
-    private int creditQty;
+    private Integer creditQty;
     
     
     private String discription;
@@ -40,11 +40,11 @@ public class Subject implements Serializable {
         this.name = name;
     }
 
-    public int getCreditQty() {
+    public Integer getCreditQty() {
         return creditQty;
     }
 
-    public void setCreditQty(int creditQty) {
+    public void setCreditQty(Integer creditQty) {
         this.creditQty = creditQty;
     }
 
