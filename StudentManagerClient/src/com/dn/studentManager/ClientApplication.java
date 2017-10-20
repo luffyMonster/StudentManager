@@ -6,6 +6,7 @@
 package com.dn.studentManager;
 
 import com.dn.studentManager.controller.ClientControl;
+import com.dn.studentManager.view.ClientView;
 import com.dn.studentManager.view.TypeMarkView;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
 public class ClientApplication {
     public static void main(String[] args) {
         try {
-            TypeMarkView view = new TypeMarkView();
+            ClientView view = new ClientView();
             ClientControl control = new ClientControl(view);
             control.startConnection("localhost", 8088);
             control.handle();

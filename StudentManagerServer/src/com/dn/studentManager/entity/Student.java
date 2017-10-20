@@ -33,23 +33,24 @@ public class Student implements Serializable {
     @Column(name = "birthday")
     private LocalDate birthday;
     
-    @Column(name = "faculty")
-    private String faculty;
+    @Column(name = "year")
+    private Integer year;
     
-    @Column(name = "birthplace")
-    private String birthplace;
+    @Column(name = "adress")
+    private String adress;
 
     public Student() {
     }
 
-    public Student(Long id, String name, LocalDate birthday, String faculty, String birthplace) {
+    public Student(Long id, String name, LocalDate birthday, Integer year, String adress) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
-        this.faculty = faculty;
-        this.birthplace = birthplace;
+        this.year = year;
+        this.adress = adress;
     }
 
+    
     public Long getId() {
         return id;
     }
@@ -74,21 +75,23 @@ public class Student implements Serializable {
         this.birthday = birthday;
     }
 
-    public String getFaculty() {
-        return faculty;
+    public Integer getYear() {
+        return year;
     }
 
-    public void setFaculty(String faculty) {
-        this.faculty = faculty;
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
-    public String getBirthplace() {
-        return birthplace;
+    public String getAdress() {
+        return adress;
     }
 
-    public void setBirthplace(String birthplace) {
-        this.birthplace = birthplace;
+    public void setAdress(String adress) {
+        this.adress = adress;
     }
+
+    
 
     
     @Override

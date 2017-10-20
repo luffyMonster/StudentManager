@@ -8,6 +8,7 @@ package com.dn.studentManager.entity;
 import java.io.Serializable;
 import java.sql.Time;
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,10 +39,7 @@ public class ParticalClass implements Serializable {
     private Subject subject;
     
     @Column(name = "time")
-    private Time time;
-    
-    @Column(name = "day_of_week")
-    private DayOfWeek dayOfWeek;
+    private LocalDateTime time;
     
     @Column(name = "room")
     private String room;
@@ -73,21 +71,14 @@ public class ParticalClass implements Serializable {
         this.subject = subject;
     }
 
-    public Time getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
-    public DayOfWeek getDayOfWeek() {
-        return dayOfWeek;
-    }
-
-    public void setDayOfWeek(DayOfWeek dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
 
     public String getRoom() {
         return room;

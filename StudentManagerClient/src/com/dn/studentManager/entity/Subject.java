@@ -23,6 +23,13 @@ public class Subject implements Serializable {
     
     private String discription;
 
+    public Subject(Long id, String name, Integer creditQty, String discription) {
+        this.id = id;
+        this.name = name;
+        this.creditQty = creditQty;
+        this.discription = discription;
+    }
+
     
     public Long getId() {
         return id;
@@ -79,7 +86,7 @@ public class Subject implements Serializable {
 
     @Override
     public String toString() {
-        return "com.dn.studentManager.domain.Student[ id=" + id + " ]";
+        return name;
     }
     
 }

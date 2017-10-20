@@ -7,9 +7,11 @@ package com.dn.studentManager.controller;
 
 import com.dn.studentManager.controller.jpaControl.MarkJpaController;
 import com.dn.studentManager.controller.jpaControl.ParticalClassJpaController;
+import com.dn.studentManager.controller.jpaControl.StudentJpaController;
 import com.dn.studentManager.controller.jpaControl.SubjectJpaController;
 import com.dn.studentManager.entity.Mark;
 import com.dn.studentManager.entity.ParticalClass;
+import com.dn.studentManager.entity.Student;
 import com.dn.studentManager.entity.Subject;
 import com.dn.studentManager.shared.Request;
 import com.dn.studentManager.view.ServerView;
@@ -67,30 +69,49 @@ public class ServerControl {
             SubjectJpaController sjc = new SubjectJpaController(emf);
             ParticalClassJpaController pcjc = new ParticalClassJpaController(emf);
             MarkJpaController mjc = new MarkJpaController(emf);
+            StudentJpaController sjcc = new StudentJpaController(emf);
 
             handlelabel:
             while ((data = fromClient.readObject()) != null) {
                 if (data instanceof Request) {
                     Request req = (Request) data;
-                    switch (req.getAction()) {
-                        case "find-subject":
-                            toClient.writeObject(sjc.findSubjectByName((String) req.getData()));
-                            break;
-                        case "find-partical-class":
-                            toClient.writeObject(pcjc.findParticalClasses((Subject) req.getData()));
-                            break;
-                        case "find-mark":
-                            toClient.writeObject(mjc.findAllMarkByParticalClass((ParticalClass) req.getData()));
-                            break;
-                        case "save-mark":
-                            toClient.writeObject(saveMark(mjc, (List<Mark>) req.getData()));
-                        case ".":
-                            toClient.writeObject(".");
-                            break handlelabel;
-                        default:
-                            toClient.writeObject("No action");
-                            break;
-                    };
+                    view.printMessage("Request to " + req.getAction());
+                    try {
+                        switch (req.getAction()) {
+                            case "get-all-subject": 
+                                toClient.writeObject(sjc.findSubjectEntities());
+                                break;
+                            case "create-student":
+                                toClient.writeObject(createStudent(sjcc, (Student) req.getData()));
+                                break;
+                            case "create-subject":
+                                toClient.writeObject(createSubject(sjc, (Subject) req.getData()));
+                                break;
+                            case "create-partical-class":
+                                toClient.writeObject(createPaticalClass(pcjc, (ParticalClass) req.getData()));
+                                break;
+                            case "find-subject":
+                                toClient.writeObject(sjc.findSubjectByName((String) req.getData()));
+                                break;
+                            case "find-partical-class":
+                                toClient.writeObject(pcjc.findParticalClasses((Subject) req.getData()));
+                                break;
+                            case "find-mark":
+                                toClient.writeObject(mjc.findAllMarkByParticalClass((ParticalClass) req.getData()));
+                                break;
+                            case "save-mark":
+                                toClient.writeObject(saveMark(mjc, (List<Mark>) req.getData()));
+                            case ".":
+                                toClient.writeObject(".");
+                                break handlelabel;
+                            default:
+                                toClient.writeObject("No action");
+                                break;
+                        };
+                    } catch (ClassCastException e) {
+                        Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, e);
+                    }
+
                 } else {
                     throw new IllegalArgumentException("Invalid data");
                 }
@@ -125,6 +146,33 @@ public class ServerControl {
     public void stop() throws IOException {
         if (server != null) {
             server.close();
+        }
+    }
+
+    public String createStudent(StudentJpaController sjcc, Student s) {
+        try {
+            sjcc.create(s);
+            return "Thành công!";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    public String createSubject(SubjectJpaController sjcc, Subject s) {
+        try {
+            sjcc.create(s);
+            return "Thành công!";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    public String createPaticalClass(ParticalClassJpaController sjcc, ParticalClass s) {
+        try {
+            sjcc.create(s);
+            return "Thành công!";
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 

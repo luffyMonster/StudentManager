@@ -7,10 +7,10 @@
     <class>com.dn.studentManager.entity.Student</class>
     <class>com.dn.studentManager.entity.Subject</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/student_manager?zeroDateTimeBehavior=convertToNull"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://127.0.0.1:1433;databaseName=student_manager"/>
+      <property name="javax.persistence.jdbc.user" value="sa"/>
+      <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="javax.persistence.jdbc.password" value="12345678"/>
     </properties>
   </persistence-unit>
 </persistence>
