@@ -11,7 +11,6 @@ import com.dn.studentManager.entity.Student;
 import com.dn.studentManager.entity.Subject;
 import com.dn.studentManager.shared.Request;
 import com.dn.studentManager.view.ClientView;
-import com.dn.studentManager.view.TypeMarkView;
 import java.awt.CardLayout;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
